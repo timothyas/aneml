@@ -1,0 +1,65 @@
+name: anemoi-graphs
+channels:
+    - conda-forge
+    - pytorch
+    - pyg
+dependencies:
+    - python=3.11
+# Basics
+    - numpy
+    - matplotlib
+    - typing_extensions
+# xarray et al
+    - xarray
+    - netCDF4
+    - h5netcdf
+    - bottleneck
+    - dask[complete]
+    - zarr
+    - cftime
+    - flox
+    - cartopy
+# jupyter etc
+    - jupyter
+    - ipython
+    - ipykernel
+# filesystem
+    - fsspec
+    - gcsfs
+# anemoi-graphs
+    - h3-py
+    - healpy
+    - hydra-core
+    - networkx
+    - plotly
+    - pytorch
+    - torchvision
+    - pyg
+    - trimesh
+    - scikit-learn
+# anemoi-datasets
+    - cfunits
+    - pyyaml
+    - semantic_version
+    - tqdm
+    - boto3
+    - requests
+    - earthkit-data[mars]
+    - earthkit-geo
+    - eccodes
+    - entrypoints
+    - pyproj
+# anemoi-utils
+    - importlib-metadata
+    - python-dateutil
+    - tomli
+    - gitpython
+    - termcolor
+    - wcwidth
+    - pip
+    - pip:
+        # anemoi-datasets
+        - earthkit-meteo
+        # anemoi-utils
+        - aniso8601
+        - nvsmi
