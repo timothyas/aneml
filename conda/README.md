@@ -32,21 +32,43 @@ subpackages are installed with pip and no-deps.
 
 So for example:
 
-- anemoi-datasets
-    - First, remove the zarr restriction from pyproject.toml, then
-    - `pip install --no-deps ./anemoi-utils[provenance]`
-    - `pip install --no-deps ./anemoi-transform`
-    - `pip install -e anemoi-datasets
+### anemoi-datasets
 
-- anemoi-graphs
-    - Copy the conda/dataset.yaml, add all dependencies from anemoi-graphs to it
-        * `conda env create -f conda/graphs.yaml`
-        * only conflicting package versions from what they specified is with h3
-          and torch geometric (both above the version the specify as max)
-    - Remove the version requirements on anemoi-utils and anemoi-datasets from
-      pyproject.toml
-    - Remove all version requirements...
-    - `pip install --no-deps ./anemoi-utils[all]`
-    - `pip install --no-deps ./anemoi-transform`
-    - `pip install --no-deps ./anemoi-datasets[all]`
-    - `pip install -e anemoi-graphs`
+```
+cd ..
+conda env create -f conda/datasets.yaml
+conda activate anemoi-datasets
+
+pip install --no-deps ./anemoi-utils[all]
+pip install --no-deps ./anemoi-transform
+```
+
+Remove the zarr restriction from anemoi-datasets/pyproject.toml, then
+
+```
+pip install -e ./anemoi-datasets
+```
+
+### anemoi-graphs
+
+First, copy the conda/datasets.yaml to conda/graphs.yaml, add all dependencies from anemoi-graphs to it
+
+
+```
+cd ..
+conda env create -f conda/graphs.yaml
+conda activate anemoi-graphs`
+
+pip install --no-deps ./anemoi-utils[all]`
+pip install --no-deps ./anemoi-transform`
+pip install --no-deps ./anemoi-datasets[all]`
+```
+
+Remove all version restrictions on anemoi-graphs/pyproject.toml
+
+```
+pip install -e ./anemoi-graphs
+```
+
+Note, after first step, only conflicting package versions from what they specified is with h3
+and torch geometric (both above the version the specify as max)
