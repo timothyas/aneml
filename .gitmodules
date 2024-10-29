@@ -1,0 +1,12 @@
+[submodule "anemoi-transform"]
+	path = anemoi-transform
+	url = git@github.com:timothyas/anemoi-transform.git
+[submodule "anemoi-utils"]
+	path = anemoi-utils
+	url = git@github.com:timothyas/anemoi-utils.git
+[submodule "anemoi-datasets"]
+	path = anemoi-datasets
+	url = git@github.com:timothyas/anemoi-datasets.git
+[submodule "anemoi-graphs"]
+	path = anemoi-graphs
+	url = git@github.com:timothyas/anemoi-graphs.git
