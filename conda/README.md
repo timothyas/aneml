@@ -37,13 +37,6 @@ So for example:
     - `pip install --no-deps ./anemoi-utils[provenance]`
     - `pip install --no-deps ./anemoi-transform`
     - `pip install -e anemoi-datasets
-    - Interestingly, this removed:
-        - some earthkit-data and earthkit meteo version 0.0.0
-        - my local install of anemoi-utils (but not anemoi-transform), probably
-          because the local install has some 0.1.dirty version, not >0.4.1 as
-          required
-        - This is because of the way the version is handled, somehow. The
-          "dev" version is out of sync with the pip version.
 
 - anemoi-graphs
     - Copy the conda/dataset.yaml, add all dependencies from anemoi-graphs to it

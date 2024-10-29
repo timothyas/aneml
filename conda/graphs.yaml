@@ -62,8 +62,8 @@ dependencies:
   - wcwidth
   - pip
   - pip:
-      # anemoi-datasets
-      - earthkit-meteo
-      # anemoi-utils
-      - aniso8601
-      - nvsmi
+    # anemoi-datasets
+    - earthkit-meteo
+    # anemoi-utils
+    - aniso8601
+    - nvsmi
