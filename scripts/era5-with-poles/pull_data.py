@@ -5,5 +5,5 @@ if __name__=="__main__":
     ds = ds.sel(time=slice("2021-01-01T00", "2021-01-01T12:00:00"))
     ds = ds[["surface_pressure", "2m_temperature", "10m_u_component_of_wind", "10m_v_component_of_wind", "temperature"]]
     ds = ds.sel(level=[500, 1000])
-    ds = ds.to_zarr("era5.zarr")
+    ds.to_zarr("era5.zarr")
 
