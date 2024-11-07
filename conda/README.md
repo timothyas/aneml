@@ -57,11 +57,11 @@ First, copy the conda/datasets.yaml to conda/graphs.yaml, add all dependencies f
 ```
 cd ..
 conda env create -f conda/graphs.yaml
-conda activate anemoi-graphs`
+conda activate anemoi-graphs
 
-pip install --no-deps ./anemoi-utils[all]`
-pip install --no-deps ./anemoi-transform`
-pip install --no-deps ./anemoi-datasets[all]`
+pip install --no-deps ./anemoi-utils[all]
+pip install --no-deps ./anemoi-transform
+pip install --no-deps ./anemoi-datasets[all]
 ```
 
 Remove all version restrictions on anemoi-graphs/pyproject.toml
