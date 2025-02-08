@@ -39,7 +39,7 @@ cd ..
 conda env create -f conda/datasets.yaml
 conda activate anemoi-datasets
 
-pip install --no-deps ./anemoi-utils[all]
+pip install --no-deps ./anemoi-utils
 pip install --no-deps ./anemoi-transform
 ```
 

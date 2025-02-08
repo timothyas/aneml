@@ -13,7 +13,7 @@ dependencies:
   - h5netcdf
   - bottleneck
   - dask[complete]
-  - zarr
+  - zarr<3
   - cftime
   - flox
   - cartopy
