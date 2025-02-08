@@ -1,0 +1,54 @@
+# YAML for creating a simple ERA5 anemoi-dataset
+#
+dates:
+  start: 2021-01-01T00
+  end: 2021-12-31T18
+  frequency: 6h
+
+input:
+  join:
+    - xarray-zarr:
+        url: "gs://weatherbench2/datasets/era5/1959-2023_01_10-wb13-6h-1440x721_with_derived_variables.zarr"
+        param:
+          - land_sea_mask
+          - geopotential_at_surface
+
+    - xarray-zarr:
+        url: "gs://weatherbench2/datasets/era5/1959-2023_01_10-wb13-6h-1440x721_with_derived_variables.zarr"
+        param:
+          - surface_pressure
+          - 10m_u_component_of_wind
+          - 10m_v_component_of_wind
+          - 2m_temperature
+          - 2m_dewpoint_temperature
+          - total_column_water
+          - total_precipitation_6hr
+
+    - xarray-zarr:
+        url: "gs://weatherbench2/datasets/era5/1959-2022-6h-1440x721.zarr"
+        param:
+          - toa_incident_solar_radiation_6hr
+
+    - xarray-zarr:
+        url: "gs://weatherbench2/datasets/era5/1959-2023_01_10-wb13-6h-1440x721_with_derived_variables.zarr"
+        param:
+          - geopotential
+          - u_component_of_wind
+          - v_component_of_wind
+          - vertical_velocity
+          - temperature
+          - specific_humidity
+        level:
+          - 50
+          - 100
+          - 150
+          - 200
+          - 250
+          - 300
+          - 400
+          - 500
+          - 600
+          - 700
+          - 850
+          - 925
+          - 1000
