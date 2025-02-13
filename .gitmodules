@@ -7,6 +7,6 @@
 [submodule "anemoi-datasets"]
 	path = anemoi-datasets
 	url = git@github.com:timothyas/anemoi-datasets.git
-[submodule "anemoi-graphs"]
-	path = anemoi-graphs
-	url = git@github.com:timothyas/anemoi-graphs.git
+[submodule "anemoi-core"]
+	path = anemoi-core
+	url = git@github.com:timothyas/anemoi-core.git

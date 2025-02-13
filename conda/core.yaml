@@ -1,4 +1,4 @@
-name: anemoi-graphs
+name: anemoi-core
 channels:
   - conda-forge
   - pytorch
@@ -15,7 +15,7 @@ dependencies:
   - h5netcdf
   - bottleneck
   - dask[complete]
-  - zarr
+  - zarr<3
   - cftime
   - flox
   - cartopy
@@ -30,6 +30,15 @@ dependencies:
   - tmux
   - colordiff
   - jupyterlab_vim
+# anemoi-training
+  - datashader
+  - mlflow
+  - pynvml
+  - pyshtools
+  - timm
+  - torchinfo
+# anemoi-models
+  - einops
 # anemoi-graphs
   - h3-py
   - healpy
