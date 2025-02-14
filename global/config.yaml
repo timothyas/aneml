@@ -1,0 +1,21 @@
+defaults:
+- data: zarr
+- dataloader: native_grid
+- diagnostics: evaluation
+- hardware: slurm
+- graph: multi_scale
+- model: gnn
+- training: gp0
+- _self_
+
+
+hardware:
+  paths:
+    output: /pscratch/sd/t/timothys/aneml/gp0/output
+    data: /pscratch/sd/t/timothys/aneml/era5-1.00-degree
+    graph: /pscratch/sd/t/timothys/aneml/gp0/graphs
+
+  files:
+    dataset: 1yr.zarr
+    graph: gp0.pt
+

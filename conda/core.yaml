@@ -35,6 +35,7 @@ dependencies:
   - mlflow
   - pynvml
   - pyshtools
+  - lightning
   - timm
   - torchinfo
 # anemoi-models
@@ -50,6 +51,7 @@ dependencies:
   - pyg
   - trimesh
   - scikit-learn
+  - typeguard
 # anemoi-datasets
   - cfunits
   - pyyaml
