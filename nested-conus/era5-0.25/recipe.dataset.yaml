@@ -24,14 +24,8 @@ input:
           - 10m_u_component_of_wind
           - 10m_v_component_of_wind
           - 2m_temperature
-          - 2m_dewpoint_temperature
           - total_column_water
           - total_precipitation_6hr
-
-    - xarray-zarr:
-        url: "gs://weatherbench2/datasets/era5/1959-2022-6h-1440x721.zarr"
-        param:
-          - toa_incident_solar_radiation_6hr
 
     - xarray-zarr:
         url: "gs://weatherbench2/datasets/era5/1959-2023_01_10-wb13-6h-1440x721_with_derived_variables.zarr"
@@ -56,3 +50,16 @@ input:
           - 850
           - 925
           - 1000
+
+    - forcings:
+        template: ${input.join.1.xarray-zarr}
+        param:
+          - cos_latitude
+          - cos_longitude
+          - sin_latitude
+          - sin_longitude
+          - cos_julian_day
+          - cos_local_time
+          - sin_julian_day
+          - sin_local_time
+          - insolation
