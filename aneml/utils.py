@@ -51,7 +51,7 @@ anemoi-datasets init {recipe_path} {output_path} --overwrite > "{log_dir}/init.l
 #SBATCH -t {load_time}
 
 conda activate anemoi-datasets
-srun anemoi-datasets load {output_path} --part "$SLURM_ARRAY_TASK_ID/12" > "{log_dir}/part_$SLURM_ARRAY_TASK_ID.log" 2>&1
+srun anemoi-datasets load {output_path} --part "$SLURM_ARRAY_TASK_ID/{n_array_tasks}" > "{log_dir}/part_$SLURM_ARRAY_TASK_ID.log" 2>&1
 """,
 
         "submit_dataset_finalise.sh": f"""#!/bin/bash

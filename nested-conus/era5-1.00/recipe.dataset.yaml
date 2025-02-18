@@ -25,7 +25,6 @@ input:
           - 10m_v_component_of_wind
           - 2m_temperature
           - total_precipitation
-          - toa_incident_solar_radiation
 
     - xarray-zarr:
         url: "gs://gcp-public-data-arco-era5/ar/1959-2022-1h-360x181_equiangular_with_poles_conservative.zarr"
@@ -50,3 +49,16 @@ input:
           - 850
           - 925
           - 1000
+
+    - forcings:
+        template: ${input.join.1.xarray-zarr}
+        param:
+          - cos_latitude
+          - cos_longitude
+          - sin_latitude
+          - sin_longitude
+          - cos_julian_day
+          - cos_local_time
+          - sin_julian_day
+          - sin_local_time
+          - insolation
