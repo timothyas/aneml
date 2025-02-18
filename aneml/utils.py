@@ -71,10 +71,10 @@ conda activate anemoi-datasets
 
 # these take 1 sec for 1 yr of data
 anemoi-datasets finalise {output_path} > "{log_dir}/finalise.log" 2>&1
-anemoi-datasets init-additions {output_path} > "{log_dir}/init_additions.log" 2>&1
+anemoi-datasets init-additions {output_path} --delta 6h > "{log_dir}/init_additions.log" 2>&1
 
 # this could be split into parts, but took ~1min on 1 yr of data
-anemoi-datasets load-additions {output_path} > "{log_dir}/load_additions.log" 2>&1
+anemoi-datasets load-additions {output_path} --delta 6h > "{log_dir}/load_additions.log" 2>&1
 
 # these were again trivial
 anemoi-datasets finalise-additions {output_path} > {log_dir}/finalise_additions.log 2>&1
