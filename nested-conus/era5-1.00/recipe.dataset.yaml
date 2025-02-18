@@ -5,6 +5,10 @@ dates:
   end: 2021-12-31T18
   frequency: 6h
 
+statistics:
+  start: 2021
+  end: 2021
+
 input:
   join:
     - xarray-zarr:
