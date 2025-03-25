@@ -1,0 +1,17 @@
+dates:
+  start: 2013-01-01T00:00:00
+  end: 2013-01-04T18:00:00
+  frequency: 6h
+
+input:
+  join:
+      - xarray-zarr:
+          url: "lonlat.zarr"
+          param:
+              - temperature
+
+      - forcings:
+          template: ${input.join.0.xarray-zarr}
+          param:
+            - cos_latitude
+            - cos_longitude
