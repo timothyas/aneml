@@ -1,0 +1,33 @@
+dates:
+  start: 2020-01-01T00
+  end: 2020-01-01T12
+  frequency: 3h
+
+input:
+  join:
+  - xarray-zarr:
+        url: "gs://noaa-ufs-gefsv13replay/ufs-hr1/0.25-degree-subsampled/03h-freq/zarr/fv3.zarr"
+        param: [tmp2m, ugrd10m, vgrd10m]
+        flavour:
+            rules:
+                latitude:
+                    name: grid_yt
+                longitude:
+                    name: grid_xt
+                time:
+                    name: time
+  - xarray-zarr:
+        url: "gs://noaa-ufs-gefsv13replay/ufs-hr1/0.25-degree-subsampled/03h-freq/zarr/fv3.zarr"
+        param: [tmp, ugrd, vgrd]
+        pfull: [97.8232650756836, 505.6520690917969]
+        flavour:
+            rules:
+                latitude:
+                    name: grid_yt
+                longitude:
+                    name: grid_xt
+                time:
+                    name: time
+                level:
+                    name: pfull
+            levtype: pl
