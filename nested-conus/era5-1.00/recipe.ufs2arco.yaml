@@ -1,0 +1,69 @@
+mover:
+  name: mpidatamover
+
+directories:
+  zarr: /pscratch/sd/t/timothys/aneml/nested-conus/era5-1.00/1year.zarr
+  cache: /pscratch/sd/t/timothys/aneml/nested-conus/era5-1.00/cache
+  logs: /pscratch/sd/t/timothys/aneml/nested-conus/era5-1.00/logs
+
+source:
+  name: gcs_era5_1degree
+  time:
+    start: 2017-01-01T00
+    end: 2017-12-31T18
+    freq: 6h
+
+  variables:
+    - land_sea_mask
+    - geopotential_at_surface
+    - surface_pressure
+    - 10m_u_component_of_wind
+    - 10m_v_component_of_wind
+    - 2m_temperature
+    - total_precipitation
+    - geopotential
+    - u_component_of_wind
+    - v_component_of_wind
+    - vertical_velocity
+    - temperature
+    - specific_humidity
+
+  levels:
+    - 100
+    - 150
+    - 200
+    - 250
+    - 300
+    - 400
+    - 500
+    - 600
+    - 700
+    - 850
+    - 925
+    - 1000
+
+target:
+  name: anemoi
+
+  slices:
+    sel:
+      latitude: [-89.5, 89.5]
+
+  forcings:
+    - sin_latitude
+    - cos_longitude
+    - sin_longitude
+    - cos_julian_day
+    - sin_julian_day
+    - cos_local_time
+    - sin_local_time
+    - cos_solar_zenith_angle
+
+  chunks:
+    time: 1
+    variable: -1
+    ensemble: 1
+    cell: -1
+
+attrs:
+  description: "Created by ufs2arco"
