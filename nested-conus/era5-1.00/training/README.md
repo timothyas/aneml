@@ -26,3 +26,5 @@ inconsistent?
 
 - [ ] check global learning rate
 - [ ] local `batch_size=2` for now... during training, larger in val
+- [ ] outputs/ dir is getting written locally rather than in scratch... OK if
+  it's just logs.
