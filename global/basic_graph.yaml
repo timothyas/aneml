@@ -1,9 +1,0 @@
-nodes:
-  data:
-    node_builder:
-      _target_: anemoi.graphs.nodes.ZarrDatasetNodes
-      dataset: /pscratch/sd/t/timothys/aneml/era5-1.00-degree/1yr.zarr
-    attributes:
-      area_weight:
-        _target_: anemoi.graphs.nodes.attributes.AreaWeights
-        norm: l2
