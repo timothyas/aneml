@@ -1,8 +1,11 @@
 # resume or fork a training from a checkpoint last.ckpt or specified in hardware.files.warm_start
 run_id: null
 fork_run_id: null
-load_weights_only: null # only load model weights, do not restore optimiser states etc.
-transfer_learning: null # activate to perform transfer learning
+transfer_learning: False # activate to perform transfer learning
+load_weights_only: False # only load model weights, do not restore optimiser states etc.
+
+# Training method/objective, e.g. forecaster, interpolator.
+task: anemoi.training.train.forecaster.GraphForecaster
 
 # run in deterministic mode ; slows down
 deterministic: False
@@ -110,6 +113,19 @@ lr:
 # 'variable' must be included in `scalars` in the losses for this to be applied.
 variable_loss_scaling:
   default: 1
+  pl:
+    specific_humidity       : 1. #0.6 #1
+    temperature             : 1. #6   #1
+    u_component_of_wind     : 1. #0.8 #0.5
+    v_component_of_wind     : 1. #0.5 #0.33
+    vertical_velocity       : 1. #0.001
+    geopotential            : 1. #12  #1
+  sfc:
+    surface_pressure        : 1. #10
+    10m_u_component_of_wind : 1. #0.1
+    10m_v_component_of_wind : 1. #0.1
+    2m_temperature          : 1.
+    total_precipitation     : 1. #0.025
 
 metrics:
 - geopotential_500
@@ -121,6 +137,8 @@ metrics:
 # https://github.com/ecmwf/anemoi-core/blob/main/training/src/anemoi/training/data/scaling.py
 pressure_level_scaler:
   _target_: anemoi.training.data.scaling.NoPressureLevelScaler
+  minimum: 1.
+  slope: 0.
 
 node_loss_weights:
   _target_: anemoi.training.losses.nodeweights.GraphNodeAttribute

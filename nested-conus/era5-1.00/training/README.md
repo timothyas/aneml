@@ -1,7 +1,7 @@
 # Training
 
 ```
-anemoi-training train --config-name=config
+srun anemoi-training train --config-name=config
 ```
 
 ## Configuration
