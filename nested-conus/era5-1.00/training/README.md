@@ -22,8 +22,12 @@ Note that graph is a bit confusing... I'm using the generated one, which is the
 same as the graph that I created beforehand... but what if they were to be
 inconsistent?
 
-## TODO
+## Other TODO
 
+- [ ] slurm `srun` command doesn't appear to be recognized...
+    * when using `srun`, we still get the pytorch distributed warning that says
+      `srun` is available but not used, and it looks like 4 independent training
+      runs get launched...
 - [ ] check global learning rate
 - [ ] local `batch_size=2` for now... during training, larger in val
 - [ ] outputs/ dir is getting written locally rather than in scratch... OK if
