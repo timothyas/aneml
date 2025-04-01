@@ -39,13 +39,17 @@ log:
   tensorboard:
     enabled: False
   mlflow:
+    # below is an example for the filesystem based server
+    # but it won't work, because the compute node IP will change
+    # per slurm job
+    # maybe it's ok to run from the login node?
     enabled: False
     offline: False
     authentication: False
     log_model: False
-    tracking_uri: null
+    tracking_uri: "http://nid200356-hsn0:5000"
     experiment_name: 'anemoi-debug'
-    project_name: 'Anemoi'
+    project_name: 'nested-conus'
     system: True
     terminal: True
     run_name: null # If set to null, the run name will be the a random UUID
