@@ -12,6 +12,12 @@ defaults:
 no_validation: False
 
 dataloader:
+  batch_size:
+    # note that the batch_size is set locally, so
+    # global_batch_size = num_nodes * num_gpus_per_node * batch_size / num_gpus_per_model
+    training: 1
+    validation: 1
+    test: 1
   training:
     dataset: ${hardware.paths.data}/1year.zarr
     start: 2017
