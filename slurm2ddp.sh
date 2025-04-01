@@ -1,4 +1,6 @@
 #! /bin/bash
+# this is mostly copied from:
+# https://github.com/NERSC/nersc-dl-multigpu/blob/main/export_DDP_vars.sh
 export RANK=$SLURM_PROCID
 export WORLD_RANK=$SLURM_PROCID
 export GLOBAL_RANK=$SLURM_PROCID
