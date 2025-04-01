@@ -48,4 +48,4 @@ hardware:
     graph: multi_scale_graph.pt
 
 training:
-  max_steps: 1_000
+  max_steps: 300_000
