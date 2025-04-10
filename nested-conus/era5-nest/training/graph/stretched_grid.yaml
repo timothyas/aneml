@@ -19,7 +19,7 @@ nodes:
       global_resolution: 5
       reference_node_name: ${graph.data}
       mask_attr_name: cutout_mask
-      margin_radius_km: 31 #11 #???
+      margin_radius_km: 11 #???
 
 edges:
 # Encoder

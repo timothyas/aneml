@@ -18,7 +18,10 @@ dataloader:
       #thinning: ???
       - dataset: ${hardware.paths.data}/global.zarr
     adjust: all
-    min_distance_km: 0
+    # No idea what this "min_distance_km" parameter should be,
+    # but for this setup it can't be zero, since the graph will
+    # try to put multiple nodes in the same place, or something
+    min_distance_km: 1
   batch_size:
     # note that the batch_size is set locally, so
     # global_batch_size = num_nodes * num_gpus_per_node * batch_size / num_gpus_per_model
