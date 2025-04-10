@@ -62,11 +62,6 @@ hardware:
     dataset: conus.training.zarr
     forcing_dataset: global.training.zarr
 
-model:
-  num_channels: 128
-  processor:
-    num_layers: 8
-
 training:
   node_loss_weights:
     _target_: anemoi.training.losses.nodeweights.ReweightedGraphNodeAttribute
@@ -77,4 +72,4 @@ training:
     # * it covers a bigger surface area
     # * it is roughly half the number of grid points
     weight_frac_of_total: .5 #???
-  max_steps: 1_000
+  max_steps: 300_000

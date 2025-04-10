@@ -1,5 +1,5 @@
 activation: GELU
-num_channels: 1024
+num_channels: 512
 cpu_offload: False
 output_mask: null
 
