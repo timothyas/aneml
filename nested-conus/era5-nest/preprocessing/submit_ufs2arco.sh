@@ -12,7 +12,9 @@
 #SBATCH -t 00:30:00
 
 conda activate ufs2arco
+module load PrgEnv-gnu
+module unload cudnn nccl
 export PYTHONPATH=""
 python create_global_grid.py
-srun ufs2arco recipe.global.yaml
-srun ufs2arco recipe.conus.yaml
+srun ufs2arco recipe.global.yaml --overwrite
+srun ufs2arco recipe.conus.yaml --overwrite
