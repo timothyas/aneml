@@ -4,6 +4,8 @@ lead_time: 4326
 
 date: 2019-01-01T00
 
+write_initial_state: True
+
 input:
   cutout:
     lam_0:
@@ -12,4 +14,4 @@ input:
       dataset: "/pscratch/sd/t/timothys/aneml/nested-conus/era5-nest/global.validation.zarr"
 
 output:
-    netcdf: "/pscratch/sd/t/timothys/aneml/nested-conus/era5-nest/inference/c080c4bf-7c5a-4f8d-ae86-b070d4e432e1/forecast.4320hr.2019-01-01T00.nc"
+    netcdf: "/pscratch/sd/t/timothys/aneml/nested-conus/era5-nest/inference/c080c4bf-7c5a-4f8d-ae86-b070d4e432e1/forecast.4320hr.2019-01-01T06.nc"

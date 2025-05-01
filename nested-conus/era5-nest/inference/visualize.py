@@ -164,7 +164,7 @@ def plot_single_timestamp(xds, fig, time, *args, **kwargs):
 
     label = xds.attrs.get("label", "")
     label += f"\nt0: {t0}"
-    label += f"\nValid: {stime}"
+    label += f"\nvalid: {stime}"
     fig.colorbar(
         p,
         ax=axs,
@@ -214,6 +214,13 @@ def main(
     ifreq=1,
     mode="figure", # or movie
 ):
+    """A note about t0
+    In the inference yaml, I think this means "the very first initial condition"... makes sense
+
+    But when I'm visualizing the data, I think about t0 as the last initial condition...
+    as in the last data given to the model before making a forecast.
+    So... the t0 given here is that one... the last IC.
+    """
 
     setup_simple_log()
 

@@ -12,4 +12,4 @@ input:
       dataset: "/pscratch/sd/t/timothys/aneml/nested-conus/era5-nest/global.validation.zarr"
 
 output:
-    netcdf: "/pscratch/sd/t/timothys/aneml/nested-conus/era5-nest/inference/c080c4bf-7c5a-4f8d-ae86-b070d4e432e1/forecast.240hr.2018-04-05T12.nc"
+    netcdf: "/pscratch/sd/t/timothys/aneml/nested-conus/era5-nest/inference/c080c4bf-7c5a-4f8d-ae86-b070d4e432e1/forecast.240hr.2018-04-05T18.nc"
