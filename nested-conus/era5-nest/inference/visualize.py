@@ -1,21 +1,60 @@
+import os
+import sys
+import logging
+
 import numpy as np
 import xarray as xr
 import pandas as pd
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import BoundaryNorm
-
-import cmocean
-import xmovie
-
 import cartopy.crs as ccrs
+import cmocean
 
-from graphufs.spatialmap import get_extend
+try:
+    import xmovie
+except ImportError:
+    print("Could not import xmovie, can't use mode='movie'")
+
 
 _projection = ccrs.Orthographic(
     central_longitude = -120,
     central_latitude = 20,
 )
+
+class SimpleFormatter(logging.Formatter):
+    def format(self, record):
+        record.relativeCreated = record.relativeCreated // 1000
+        return super().format(record)
+
+def setup_simple_log(level=logging.INFO):
+
+    logging.basicConfig(
+        stream=sys.stdout,
+        level=level,
+    )
+    logger = logging.getLogger()
+    formatter = SimpleFormatter(fmt="[%(relativeCreated)d s] [%(levelname)s] %(message)s")
+    for handler in logger.handlers:
+        handler.setFormatter(formatter)
+
+def get_extend(xds, vmin=None, vmax=None):
+    minval = []
+    maxval = []
+    for key in xds.data_vars:
+        minval.append(xds[key].min().values)
+        maxval.append(xds[key].max().values)
+    minval = np.min(minval)
+    maxval = np.max(maxval)
+    vmin = minval if vmin is None else vmin
+    vmax = maxval if vmax is None else vmax
+
+    extend = "neither"
+    if minval < vmin:
+        extend = "min"
+    if maxval > vmax:
+        extend = "max" if extend == "neither" else "both"
+    return extend, vmin, vmax
 
 def get_precip_kwargs():
     n = 1
@@ -37,7 +76,7 @@ def nested_scatter(ax, xds, varname, **kwargs):
     mappables = []
     for slc, s in zip(
         [slice(None, n_conus), slice(n_conus, None)],
-        [8/16, 8],
+        [1/2, 12],
     ):
 
         p = ax.scatter(
@@ -71,47 +110,61 @@ def nested_scatter(ax, xds, varname, **kwargs):
         ax.scatter(xL, yL, **kw)
     return mappables
 
-def movie_func(xds, fig, time, *args, **kwargs):
+def plot_single_timestamp(xds, fig, time, *args, **kwargs):
 
     axs = []
-    dalist = []
 
     truthname = [y for y in list(xds.data_vars) if y in ("ERA5", "Replay")][0]
     vtime = xds["time"].isel(time=time).values
     stime = str(vtime)[:13]
 
+    # get these extra options
+    cbar_kwargs = kwargs.pop("cbar_kwargs", {})
+    extend = kwargs.pop("extend", None)
+    t0 = kwargs.pop("t0", "")
+    truth_x = kwargs.pop("truth_x", None)
+    truth_y = kwargs.pop("truth_y", None)
+
+
     # Create axes
     ax = fig.add_subplot(1, 2, 1, projection=_projection)
 
-    cbar_kwargs = kwargs.pop("cbar_kwargs", {})
-
     # Plot Truth
-    plotme = xds[truthname].isel(time=time)
-    p = plotme.plot(ax=ax, transform=ccrs.PlateCarree(), add_colorbar=False, **kwargs)
+    # Note that this scatter is very slow for movies
+    # But... it is the truest comparison to the other plot
+    # We could move to datashader eventually
+    p = ax.scatter(
+        truth_x,
+        truth_y,
+        c=xds[truthname].isel(time=time),
+        s=.5,
+        transform=ccrs.PlateCarree(),
+        **kwargs,
+    )
+    # pcolormesh option
+    #p = xds[truthname].isel(time=time).plot(
+    #    ax=ax,
+    #    transform=ccrs.PlateCarree(),
+    #    add_colorbar=False,
+    #    **kwargs,
+    #)
     ax.set(title="ERA5")
-
     axs.append(ax)
-    dalist.append(plotme)
 
     # Plot model
     ax = fig.add_subplot(1, 2, 2, projection=_projection)
 
     pp = nested_scatter(ax, xds.isel(time=time), "PSL Nested", **kwargs)
     ax.set(title="PSL Nested")
-
     axs.append(ax)
-    dalist.append(plotme)
 
     # now the colorbar
     [ax.set(xlabel="", ylabel="") for ax in axs]
     [ax.coastlines("50m") for ax in axs]
-    extend, kwargs["vmin"], kwargs["vmax"] = get_extend(
-        dalist,
-        kwargs.get("vmin", None),
-        kwargs.get("vmax,", None),
-    )
+
     label = xds.attrs.get("label", "")
-    label += f"\n{stime}"
+    label += f"\nt0: {t0}"
+    label += f"\nValid: {stime}"
     fig.colorbar(
         p,
         ax=axs,
@@ -156,21 +209,35 @@ def get_truth(name):
 def main(
     read_path,
     store_dir,
-    t0="2019-01-01T00",
-    tf="2019-06-30T00",
+    t0,
+    tf,
     ifreq=1,
-    still_index=None,
+    mode="figure", # or movie
 ):
 
+    setup_simple_log()
+
+    assert mode in ["figure", "movie"]
+
+
+    logging.info(f"Time Bounds:\n\tt0 = {t0}\n\ttf = {tf}\n")
     psl = xr.open_dataset(read_path)
     psl = psl.sel(time=slice(t0, tf))
     psl = psl.isel(time=slice(None, None, ifreq))
     psl = psl.rename({"longitude": "longitudes", "latitude": "latitudes"})
     psl = psl.set_coords(["longitudes", "latitudes"])
 
+    logging.info(f"Ready to make {mode}s with dataset:\n{psl}\n")
+
     for tname in ["ERA5"]:
 
         truth = get_truth(tname)
+        truth_x, truth_y = np.meshgrid(truth.longitude, truth.latitude)
+        logging.info(f"Retrieved truth = {tname}\n{truth}\n")
+        fig_dir = os.path.join(store_dir, f"{mode}s", f"{truth.name.lower()}-vs-nested")
+        if not os.path.isdir(fig_dir):
+            os.makedirs(fig_dir)
+            logging.info(f"Created fig_dir: {fig_dir}")
 
         # Compute this
         psl["10m_wind_speed"] = calc_wind_speed(psl)
@@ -196,7 +263,12 @@ def main(
             "total_precipitation_6hr": get_precip_kwargs(),
         }
 
+
         for varname, options in plot_options.items():
+
+            logging.info(f"Plotting {varname} with options")
+            for key, val in options.items():
+                logging.info(f"\t{key}: {val}")
 
             ds = xr.Dataset({
                 "PSL Nested": psl[varname].load(),
@@ -212,50 +284,69 @@ def main(
                     ds[key] -= 273.15
                     ds[key].attrs["units"] = "degC"
 
+                logging.info(f"\tconverted {varname} K -> degC")
+
             # Convert to mm->m
             if "total_precipitation" in varname:
                 for key in ds.data_vars:
                     ds[key] *= 1000
                     ds[key].attrs["units"] = "m"
 
+                logging.info(f"\tconverted {varname} mm -> m")
 
             label = " ".join([x.capitalize() for x in varname.split("_")])
             ds.attrs["label"] = f"{label} ({ds[truth.name].units})"
 
-            dpi = 300
-            pixelwidth = 10*dpi
-            pixelheight = 6*dpi
-            mov = xmovie.Movie(
+            # colorbar extension options
+            options["extend"], vmin, vmax = get_extend(
                 ds,
-                movie_func,
-                framedim="time",
-                input_check=False,
-                pixelwidth=pixelwidth,
-                pixelheight=pixelheight,
-                dpi=dpi,
-                **options
+                vmin=options.get("vmin", None),
+                vmax=options.get("vmax", None),
             )
-            if still_index is not None:
-                vtime = ds["time"].isel(time=still_index).values
-                stime = str(vtime)[:13]
-                fig, ax, pp = mov.render_single_frame(still_index)
-                fig.savefig(
-                    f"{store_dir}/still.{truth.name.lower()}_vs_psl.{varname}.{t0}.{stime}.jpeg",
-                    dpi=dpi,
-                    bbox_inches="tight",
-                )
-    #        mov.save(
-    #            f"{store_dir}/{truth.name.lower()}_vs_psl.{varname}.{t0}.{tf}.mp4",
-    #            progress=True,
-    #            overwrite_existing=True,
-    #        )
+            logging.info(f"\tcolorbar extend = {options['extend']}")
 
-if __name__ == "__main__":
-    inference_dir = "/pscratch/sd/t/timothys/aneml/nested-conus/era5-nest/inference/c080c4bf-7c5a-4f8d-ae86-b070d4e432e1"
-    main(
-        read_path=f"{inference_dir}/forecast.4320hr.2019-01-01T00.nc",
-        store_dir=inference_dir,
-        t0="2019-01-01T00",
-        tf="2019-06-30T00",
-        still_index=1,
-    )
+            # precip is weird, since we don't do vmin/vmax, we do BoundaryNorm colorbar map blah blah
+            # since we know it's bounded to be positive in anemoi... at least in this model..
+            # then just worry about max
+            if "total_precipitation" in varname:
+                options["extend"] = "max" if vmax > 50 else "neither"
+                logging.info(f"\ttotal_precipitation hack: setting extend based on upper limit of 50")
+
+            options["t0"] = t0
+            options["truth_x"] = truth_x
+            options["truth_y"] = truth_y
+
+            dpi = 300
+            width = 10
+            height = 6.5
+            pixelwidth = width*dpi
+            pixelheight = height*dpi
+
+            if mode == "figure":
+
+                fig = plt.figure(figsize=(width, height))
+                itime = list(pd.Timestamp(x) for x in ds["time"].values).index(pd.Timestamp(tf))
+                plot_single_timestamp(
+                    xds=ds,
+                    fig=fig,
+                    time=itime,
+                    **options,
+                )
+                fname = f"{fig_dir}/{varname}.{t0}.{tf}.jpeg"
+                fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+                logging.info(f"Stored figure at: {fname}\n")
+
+            else:
+                mov = xmovie.Movie(
+                    ds,
+                    plot_single_timestamp,
+                    framedim="time",
+                    input_check=False,
+                    pixelwidth=pixelwidth,
+                    pixelheight=pixelheight,
+                    dpi=dpi,
+                    **options
+                )
+                fname = f"{fig_dir}/{varname}.{t0}.{tf}.mp4"
+                mov.save(fname, progress=True, overwrite_existing=True)
+                logging.info(f"Stored movie at: {fname}\n")
