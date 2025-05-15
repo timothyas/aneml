@@ -154,8 +154,8 @@ def plot_single_timestamp(xds, fig, time, *args, **kwargs):
     # Plot model
     ax = fig.add_subplot(1, 2, 2, projection=_projection)
 
-    pp = nested_scatter(ax, xds.isel(time=time), "PSL Nested", **kwargs)
-    ax.set(title="PSL Nested")
+    pp = nested_scatter(ax, xds.isel(time=time), "Prediction: Nested-ERA5", **kwargs)
+    ax.set(title="Prediction: Nested-ERA5")
     axs.append(ax)
 
     # now the colorbar
@@ -252,6 +252,7 @@ def main(
 
         # setup for each variable
         plot_options = {
+            "total_precipitation_6hr": get_precip_kwargs(),
             "2m_temperature": {
                 "cmap": "cmo.thermal",
                 "vmin": -10,
@@ -267,7 +268,7 @@ def main(
                 "vmin": 0,
                 "vmax": 60,
             },
-            "total_precipitation_6hr": get_precip_kwargs(),
+
         }
 
 
@@ -278,11 +279,11 @@ def main(
                 logging.info(f"\t{key}: {val}")
 
             ds = xr.Dataset({
-                "PSL Nested": psl[varname].load(),
+                "Prediction: Nested-ERA5": psl[varname].load(),
             })
 
             ds[truth.name] = truth[varname].sel(
-                time=ds["PSL Nested"].time.values,
+                time=ds["Prediction: Nested-ERA5"].time.values,
             ).load()
 
             # Convert to degC
