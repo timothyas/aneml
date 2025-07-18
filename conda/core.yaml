@@ -1,8 +1,6 @@
-name: anemoi-core
+name: anemoi
 channels:
   - conda-forge
-  - pytorch
-  - pyg
 dependencies:
   - python=3.11
 # Basics
@@ -35,6 +33,7 @@ dependencies:
   - mlflow
   - pynvml
   - pyshtools
+  - lightning
   - timm
   - torchinfo
 # anemoi-models
@@ -45,11 +44,9 @@ dependencies:
   - hydra-core
   - networkx
   - plotly
-  - pytorch
-  - torchvision
-  - pyg
   - trimesh
   - scikit-learn
+  - typeguard
 # anemoi-datasets
   - cfunits
   - pyyaml
@@ -76,3 +73,7 @@ dependencies:
     # anemoi-utils
     - aniso8601
     - nvsmi
+    - torch
+    - torchvision
+    - torchaudio
+    - torch_geometric

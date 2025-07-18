@@ -1,0 +1,3 @@
+job-scripts/
+slurm/
+*.zarr*

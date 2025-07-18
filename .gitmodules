@@ -10,3 +10,6 @@
 [submodule "anemoi-core"]
 	path = anemoi-core
 	url = git@github.com:timothyas/anemoi-core.git
+[submodule "anemoi-inference"]
+	path = anemoi-inference
+	url = https://github.com/timothyas/anemoi-inference
